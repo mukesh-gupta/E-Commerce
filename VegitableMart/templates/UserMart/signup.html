@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup</title>
+
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/ajax.js' %}"></script>
+
+    <style type="text/css">
+            body{
+    background-color:#9ac234;
+    }
+    </style>
+</head>
+<body>
+{% block content %}
+
+    <div class="row justify-content-center mt-5" style="margin:30px;">
+        <div class="col-md-5"  style=" background-color:lightblue;margin-bottom:40px;padding:30px;box-shadow:10px 4px 10px;">
+              <h2 class="second" style="color:#ff6a00;margin-top:-20px">Sign Up</h2>
+            {% for message in messages %}
+                <div class="alert {{message.tags}} shadow" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+                           {% if otp %}
+                          <form method="POST">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom display">
+                                    <h3 class="float-left">Verify Your Email</h3>
+
+                                <img src="" class="logo float-right pt-1" width="25">
+                                </legend>
+                                <input type="hidden" name="user" value="{{user.username}}">
+                                <div class="input-group mb-3">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">OTP</span>
+                                  </div>
+                                  <input type="text" class="form-control" placeholder="Enter Your OTP" aria-label="OTP" aria-describedby="basic-addon1" name = 'otp'>
+                                </div>
+
+                            </fieldset>
+                            <div class="form-grounp">
+                                <button class="btn btn-primary ig" type="submit">Verify</button>
+                                <small class="float-right text-muted">
+                                    <i><a href="#" class="text-dark"
+                                  onclick="ReSendOTP('{{user.username}}', 'resendOTPmess')">
+                                        <i id="resendOTPmess">Resend</i>
+                                        OTP</a></i></small>
+
+                            </div>
+
+                        </form>
+            {% else %}
+            <form method="POST">
+                {% csrf_token %}
+                   <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name" class="form-control shadow" id="first_name" aria-describedby="first_nameHelp" required>
+                    <small id="first_nameeHelp" class="form-text text-muted">Your first name must be unique. We'll let you know if someone has taken it already.</small>
+                </div>
+                   <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name" class="form-control shadow" id="last_name" aria-describedby="last_nameHelp" required>
+
+                </div>
+                   <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" name="email" class="form-control shadow" id="email" aria-describedby="emailHelp" required>
+                  <small id="last_nameHelp" class="form-text text-muted">Your Last name must be unique. We'll let you know if someone has taken it already.</small>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" class="form-control shadow" id="username" aria-describedby="usernameHelp" required>
+                    <small id="usernameHelp" class="form-text text-muted">Your username must be unique. We'll let you know if someone has taken it already.</small>
+                </div>
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    <input type="password" name="password1" class="form-control shadow" id="password1" required>
+                </div>
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" name="password2" class="form-control shadow" id="password2" required>
+                </div>
+                <button type="submit" class="btn btn-primary ig">Sign Up</button>
+            </form>
+            <hr>
+            <div class="text-center">
+                Do you already have an account? <a href="{% url 'login' %}">Login here</a>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+</body>
+</html>

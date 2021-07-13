@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en-us">
+{% load static %}
+<body>
+
+{% block content %}
+
+<div style="background-color:lightgray;padding-bottom:30px">
+
+	<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}" style="background-image: url(&quot;{% static 'img/breadcrumb.jpg' %}&quot;);">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                      <h2>Checkout</h2>
+                        <div class="breadcrumb__option">
+                            <a href="{% url 'home' %}">Home</a>
+                            <span>Checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+	<div style="margin-top:50px;margin-left:30px;margin-right:30px;margin-bottom:30px;">
+
+		<div class="row">
+				<div class="col-md" style="margin-left:20px;margin-right:20px;margin-bottom:40px;">
+				<div class="box-element" style="background-color:#9ac234">
+					<a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+					<hr>
+					<h3>Order Summary</h3>
+					<hr>
+
+					<div class="row" style="padding-left:20px">
+						<table>
+						         <thead>
+                                <tr>
+                                    <th class="shoping__product" style="padding-bottom:10px;">Products</th>
+                                    <th  style="padding-right:40px;">Price</th>
+                                    <th style="padding-right:40px;">Quantity</th>
+                                </tr>
+                            </thead>
+							{% for item in items %}
+							<tr>
+								<td style="margin-bottom:25px">
+									<img  src="{{item.product.imageURL}}" width="20%" style="margin-bottom:10px">
+									<span style="padding-left:15px;">{{item.product.name}}</span>
+								</td>
+								{% if item.product.offer %}
+								<td>
+									<del style="padding-right:50px">₹{{item.product.price|floatformat:2}}</del>
+									<span style="padding-right:50px">₹{{item.product.offer|floatformat:2}}</span>
+								</td>
+								{% else %}
+								<td style="margin-bottom:25px;">
+									<span style="padding-right:50px;">₹{{item.product.price|floatformat:2}}</span>
+								</td>
+								{% endif %}
+
+								<td style="padding-left:20px">
+									x{{item.quantity}}
+								</td>
+							</tr>
+								{% endfor %}
+						</table>
+					</div>
+
+					<hr>
+					<div>
+						<h5>Items:   {{order.total_quantity}}</h5>
+						<h5>Total:  ₹  {{order.total_cart}}</h5>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="col-md" style="margin-left:20px;margin-right:20px">
+				<div class="box-element" id="form-detail" style="background-color:#9ac234">
+					<form id="form" style="padding:30px">
+						<div id="detail-user">
+
+							<div style="margin-top:10px">
+								<input required class="form-control" type="text" name="name" placeholder="Name">
+							</div>
+
+							<div style="margin-top:10px">
+								<input required class="form-control" type="email" name="email" placeholder="Email..">
+							</div>
+
+						</div>
+
+						<div id="detail-ship">
+							<hr>
+							<p>Shipping Information:</p>
+							<hr>
+
+							<div style="margin-top:10px">
+								<input class="form-control" type="text" name="address" placeholder="Address..">
+							</div>
+
+							<div style="margin-top:10px">
+								<input class="form-control" type="text" name="city" placeholder="City..">
+							</div>
+
+							<div style="margin-top:10px">
+								<input class="form-control" type="text" name="state" placeholder="State..">
+							</div>
+
+							<div style="margin-top:10px">
+								<input class="form-control" type="text" name="zipcode" placeholder="Zip code..">
+							</div>
+
+							<div style="margin-top:10px">
+								<input class="form-control" type="text" name="country" placeholder="Zip code..">
+							</div>
+
+						</div>
+						<hr>
+{% if not request.user.is_authenticated %}
+						<a href="{% url 'signup' %}" class="btn btn-warning btn-block">Continue</a>
+						{% else %}
+						<input id="form-submit" class="btn btn-warning btn-block" type="submit" value="Continue">
+						{% endif %}
+					</form>
+				</div>
+				<br>
+
+				<div class="box-element hidden" id="pay" style="background-color:#9ac234">
+					<button id="pay-money" class="btn btn-primary btn-block">Payment</button>
+
+					<!--
+					     //for paypal button
+					<div id="paypal-button-container"></div>
+					-->
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--
+
+// for Paypal money transaction option method
+
+<script src="https://www.paypal.com/sdk/js?client-id=PUT-HERE-YOUR-CLIENT-ID&currency=USD&disable-funding=credit"></script>
+
+<script>
+
+        var total='{{order.total_cart}}'
+        paypal.Buttons({
+
+        style:{
+         color : 'blue' ,
+        shape : 'rect'
+        },
+
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: parseFloat(total).toFixed(2)
+                        }
+                    }]
+                });
+            },
+
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+
+                  submitFormData()
+                });
+            }
+
+
+        }).render('#paypal-button-container');
+
+</script>
+-->
+
+<script type="text/javascript">
+ var total='{{order.total_cart}}'
+		var shipping = '{{order.shipping}}'
+
+		if (shipping == 'False'){
+		 	document.getElementById('detail-ship').innerHTML = ''
+		}
+
+
+		if (user != 'AnonymousUser'){
+		 	document.getElementById('detail-user').innerHTML = ''
+		 }
+
+		if (shipping == 'False' && user != 'AnonymousUser'){
+				document.getElementById('form-detail').classList.add("hidden");
+			    document.getElementById('pay').classList.remove("hidden");
+		}
+
+		var form = document.getElementById('form')
+		form.addEventListener('submit', function(e){
+	    	e.preventDefault()
+	    	console.log('Form Submitted...')
+	    	document.getElementById('form-submit').classList.add("hidden");
+	    	document.getElementById('pay').classList.remove("hidden");
+	    })
+
+
+    document.getElementById('pay-money').addEventListener('click', function(e){
+	    	submitFormData()
+	    })
+
+	    function submitFormData(){
+	    	console.log('Payment button clicked')
+
+	    	var userFormData = {
+				'name':null,
+				'email':null,
+				'total':total,
+			}
+
+			var shippingInfo = {
+				'address':null,
+				'city':null,
+				'state':null,
+				'zipcode':null,
+			}
+
+			if (shipping != 'False'){
+	    		shippingInfo.address = form.address.value
+		    	shippingInfo.city = form.city.value
+		    	shippingInfo.state = form.state.value
+		    	shippingInfo.zipcode = form.zipcode.value
+	    	}
+
+	    	if (user == 'AnonymousUser'){
+	    		userFormData.name = form.name.value
+	    		userFormData.email = form.email.value
+	    	}
+
+	    	var url = "/process_order/"
+	    	fetch(url, {
+	    		method:'POST',
+	    		headers:{
+	    			'Content-Type':'application/json',
+	    			'X-CSRFToken': csrftoken,
+	    		},
+	    		body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo}),
+
+	    	})
+	    	.then((response) => response.json())
+	    	.then((data) => {
+				console.log('Success:', data);
+				alert('Transaction completed');
+
+				cart={}
+				document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
+				window.location.href = "{% url 'home' %}"
+
+				})
+	    }
+
+
+</script>
+
+{% endblock %}
+
+</body>
+</html>

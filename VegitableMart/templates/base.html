@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ogani | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/Style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/CSStyle.css' %}" type="text/css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <script type="text/javascript">
+     var user='{{request.user}}'
+
+    function getToken(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getToken('csrftoken');
+
+		function getCookie(name) {
+		    var cookieArr = document.cookie.split(";");
+
+		    for(var i = 0; i < cookieArr.length; i++) {
+		        var cookiePair = cookieArr[i].split("=");
+
+		        if(name == cookiePair[0].trim()) {
+
+		            return decodeURIComponent(cookiePair[1]);
+		        }
+		    }
+		    return null;
+		}
+
+		var cart = JSON.parse(getCookie('cart'))
+
+		if (cart == undefined){
+			cart = {}
+			console.log('Cart Created!', cart)
+			document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+		}
+		console.log('Cart:', cart)
+
+    </script>
+</head>
+
+<body>
+
+    <div class="humberger__menu__overlay"></div>
+
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="{% url 'home' %}"><img src="{% static 'img/mart.png' %}" width="50px"height="50px" alt=""></a>
+              <div class="header__top__right__auth">
+                   <p id="cart-to">{{cartItems}}</p>
+                  <a href="{% url 'cart' %}">
+                      <img id ="cart"src="{% static 'img/carts.png' %}">
+                  </a>
+              </div>
+        </div>
+
+        {% if request.user.is_authenticated %}
+         <div  style="margin-bottom:20px">
+             <img src="{% static 'img/india.png' %}" width="40px" height="30px" alt="">
+             <span style="color:red;padding-left:20px">English</span>
+         </div>
+
+        <div class="header__top__right__auth" style="padding-right:15px">
+            <span style="color:green">Welcome,</span>
+            <span style="color:green;padding:5px">{{request.user.customer|capfirst}}</span>
+        </div>
+
+        <div class="humberger__menu__widget">
+            <div class="header__top__right__auth" style="padding-right:15px">
+                <a href="{% url 'logout' %}"><i class="fa fa-user"></i> Logout</a>
+            </div>
+        </div>
+        {% else %}
+
+        <div class="humberger__menu__widget">
+            <div class="header__top__right__auth" style="padding-right:15px">
+                <a href="{% url 'signup' %}"><i class="fa fa-user"></i> Signup</a>
+            </div>
+
+            <div class="header__top__right__language">
+                <img src="{% static 'img/india.png' %}" width="40px" height="30px" alt="">
+                <div>English</div>
+            </div>
+
+            <div class="header__top__right__auth">
+                <a href="{% url 'login' %}"><i class="fa fa-user"></i> Login</a>
+            </div>
+
+        </div>
+        {% endif %}
+
+        <ul class="nav flex-column">
+            <li class="nav-item active">
+                <a style="color:black" href="{% url 'home' %}">Home</a>
+            </li>
+
+            <li class="nav-item">
+                <a style="color:black" href="{% url 'cart' %}">Shoping Cart</a>
+            </li>
+
+            <li class="nav-item">
+                <a style="color:black" href="{% url 'checkout' %}">Check Out</a>
+            </li>
+
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                <a style="color:black" href="{% url 'setting' %}">Setting</a>
+            </li>
+            {% endif %}
+        </ul>
+
+    </div>
+
+     {% for message in messages %}
+        <div class=" alert {{ message.tags }} m-1 shadow" id="body" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__left">
+                            <div class="header__top__right__language" style="padding-bottom:10px;margin-bottom:-30px;">
+                                <img src="{% static 'img/india.png' %}" width="50px" height="50px" alt="">
+                                <div>English</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6" style="margin-top:-5px;">
+                        <div class="header__top__right">
+
+                            {% if request.user.is_authenticated %}
+                            <div class="header__top__right__auth" style="padding-right:15px">
+                                <span style="color:green">Welcome,</span>
+                                <span style="color:green;padding:5px">{{request.user.customer|capfirst}}</span>
+                            </div>
+
+                            <div class="header__top__right__auth">
+                                <a href="{% url 'logout' %}"><i class="fa fa-user"></i> Logout</a>
+                            </div>
+
+                            {% else %}
+                           <div class="header__top__right__auth" style="padding-right:20px;">
+                                <a href="{% url 'signup' %}"><i class="fa fa-user"></i>Signup</a>
+                            </div>
+                            <div class="header__top__right__auth">
+                                <a href="{% url 'login' %}"><i class="fa fa-user"></i> Login</a>
+                            </div>
+                            {% endif %}
+
+                            <div class="header__top__right__auth">
+                                <p id="cart-to">{{cartItems}}</p>
+                                <a href="{% url 'cart' %}">
+                                <img id ="cart-icon"src="{% static 'img/carts.png' %}">
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a href="{% url 'home' %}"><img src="{% static 'img/mart.png' %}" width="100px"height="70px" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                            <li style="margin-left:-150px"><a href="{% url 'home' %}">Home</a></li>
+                            <li>
+                                <a href="#">Pages</a>
+                                <ul class="header__menu__dropdown">
+                                    <li><a href="{% url 'cart' %}">Shoping Cart</a></li>
+                                    <li><a href="{% url 'checkout' %}">Check Out</a></li>
+                                </ul>
+                            </li>
+                            {% if request.user.is_authenticated %}
+                            <li><a href="{% url 'setting' %}">Setting</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+{% block content %}
+
+    {% endblock %}
+
+{% if 'signup' in request.path %}
+ <footer class="footer spad" style="margin-top:-20px">
+     {% else %}
+     <footer class="footer spad">
+         {% endif %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__about__logo">
+                            <a href="{% url 'home' %}"><img src="{% static 'img/mart.png' %}" alt=""></a>
+                        </div>
+                        <ul>
+                            <li>Address: 60-49 Road 11378 New York</li>
+                            <li>Phone: +65 11.188.888</li>
+                            <li>Email: hello@greenmart.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
+                    <div class="footer__widget">
+                        <h6>Useful Links</h6>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">About Our Shop</a></li>
+                            <li><a href="#">Secure Shopping</a></li>
+                            <li><a href="#">Delivery infomation</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Our Sitemap</a></li>
+                        </ul>
+                        <ul>
+                            <li><a href="#">Who We Are</a></li>
+                            <li><a href="#">Our Services</a></li>
+                            <li><a href="#">Projects</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Innovation</a></li>
+                            <li><a href="#">Testimonials</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="footer__widget">
+                        <h6>Join Our Newsletter Now</h6>
+                        <p>Get E-mail updates about our latest shop and special offers.</p>
+                        <form action="#">
+                            <input type="text" placeholder="Enter your mail">
+                            <button type="submit" class="site-btn">Subscribe</button>
+                        </form>
+                        <div class="footer__widget__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer__copyright">
+                        <div class="footer__copyright__text"><p>
+  Copyright &copy; All rights reserved | <i class="fa fa-heart" aria-hidden="true"></i> by <a href="{% url 'home' %}">Home</a>
+</p></div>
+                        <div class="footer__copyright__payment"><img src="{% static 'img/payment-item.png' %}" alt=""></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+ </footer>
+
+ <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/mart.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+</body>
+</html>

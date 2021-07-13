@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en-us">
+{% load static %}
+<body>
+{% block content %}
+
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__item">
+                            <img class="product__details__pic__item--large" src="{{item.imageURL}}" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__text">
+                        <h3>{{item.name}}</h3>
+                        <div class="product__details__rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <span>(18 reviews)</span>
+                        </div>
+
+                        <div class="product__details__price">
+
+                            {% if item.offer %}
+                            <del>₹ {{item.price|floatformat:2}} kg</del><br>
+                            ₹ {{item.offer}} kg
+                            {% else %}
+                            ₹ {{item.price|floatformat:2}} kg
+                            {% endif %}
+
+                        </div>
+                        <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
+                            vehicula elementum sed sit amet dui. Sed porttitor lectus nibh. Vestibulum ac diam sit amet
+                            quam vehicula elementum sed sit amet dui. Proin eget tortor risus.</p>
+
+                        <a href="#" data-item="{{item.id}}" data-act="add" class="primary-btn item-cart">ADD TO CARD</a>
+                         <a href="{% url 'cart' %}" class="heart-icon" style="background-color:#7fad39;">
+                             <i class="fa fa-shopping-cart" style="color:black;font-size:25px;"></i>
+                         </a>
+
+                        <ul>
+                            <li><b>Availability</b> <span>In Stock</span></li>
+                            <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
+                            <li><b>Weight</b> <span>0.5 kg</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   {% endblock %}
+
+</body>
+
+</html>

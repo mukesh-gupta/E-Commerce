@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</head>
+
+<body style="background-color:lightgray;">
+
+<div class="container" style="margin-top:50px;">
+         {% for message in messages %}
+        <div class=" alert {{ message.tags }} m-1 shadow" id="msg" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+
+    <a href="{% url 'home' %}" class="btn btn-outline-info" style="margin-left:5px">go to home</a>
+
+    <div class="row" style="margin-bottom:20px">
+        <div class="col-md" style="border:2px solid gray;margin-top:30px;margin-right:20px;margin-left:20px;background-color:lightblue;">
+
+            <div style="text-align:center;padding-top:30px">
+                <h1>Account setting</h1>
+            </div>
+
+            <div style="padding:30px;text-align:center">
+                <img src="{{request.user.customer.profileURL}}" width="60%"  alt="..." style="border-radius:20px">
+            </div>
+
+            <div class="card-body">
+                <h3 class="card-title">Name: {{request.user.customer.name|capfirst}}</h3>
+                <h4 class="card-title">Email: {{request.user.customer.email|capfirst}}</h4>
+            </div>
+
+        </div>
+
+        <div class="col-md" style="border:2px solid gray;margin-top:30px;margin-right:20px;margin-left:20px;padding-bottom:30px;background-color:lightblue;">
+
+            <div style="padding-left:30px;padding-top:30px">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="profile" class="col-sm-2 col-form-label" style="color:blue">profile:</label>
+                        <div class="col-sm-10">
+                            {{form.profile}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 col-form-label" style="color:blue">Name:</label>
+                        <div class="col-sm-10">
+                            {{form.name}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="col-sm-2 col-form-label" style="color:blue">Email:</label>
+                        <div class="col-sm-10">
+                            <span >{{form.email}}</span>
+                        </div>
+                    </div>
+
+                    <div style="padding-left:15px">
+                        <input type="submit" class="btn btn-success" style="padding-left:50px;padding-right:50px" value="change">
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
